@@ -96,70 +96,58 @@ function App() {
   return (
     <div className={`h-screen ${darkMode ? 'bg-black' : 'bg-gray-100'} flex flex-col transition-all duration-300`}>
       <div className="flex justify-between items-center p-4">
-        <h1 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-black'} sm:text-2xl md:text-3xl`}>Chat Room</h1>
-        <div className={`flex ${darkMode ? "bg-black": "text-white"} w-46 sm:w-full md:w-1/3 lg:w-1/4 xl:w-1/5 mr-[60rem] p-3 rounded-lg border`}>
+        <h1 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-black'}`}>Chat Room</h1>
+        <div className={`flex ${darkMode ? "bg-black": "text-white"} w-46 mr-[64rem] p-3 rounded-lg border`}>
           <p className={`${darkMode ? "text-white": "text-black"} mr-2`}>Room Code:</p>
           <div className={`${darkMode ? "text-white": "text-black"}`}>{roomId}</div>
           <div className={`${darkMode? "text-neutral-400": "text-black"} ml-2`} onClick={copyToClipboard}>
             <Copy />
           </div>
         </div>
-        <div className="flex items-center">
-          <button onClick={() => setDarkMode(!darkMode)} className={`p-2 ${darkMode ? 'bg-black border border-neutral-800 hover:bg-neutral-900' : 'bg-white hover:bg-neutral-100'} rounded-md transition-all duration-300`}>
-            {darkMode ? <Dark /> : <Light />}
-          </button>
+        <div className="fixed top-4 right-4">
+            <button onClick={() => setDarkMode(!darkMode)} className={`p-2 ${darkMode? 'bg-black border border-neutral-800 hover:bg-neutral-900': 'bg-white hover:bg-neutral-100'} rounded-md transition-all duration-300`}>{darkMode ? <Dark /> : <Light />}</button>
         </div>
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 space-y-2 m-2">
-        {m.map((message, index) => (
-          <div key={index} className={`m-2 ${message.status === "sent" ? "flex justify-end" : "flex justify-start"}`}>
-            <div>
-              <div className={`${message.status === "sent" ? "flex justify-end" : "flex justify-start"}`}>
-                <p className={`text-xs font-medium ${darkMode ? "text-gray-300": "text-gray-600"} mb-1`}>{message.username}</p>
+        {m.map((message,index) => (
+            <div key={index} className={`m-2 ${message.status === "sent" ? "flex justify-end" : "flex justify-start"}`}>
+              <div>
+                <div className={`${message.status === "sent" ? "flex justify-end" : "flex justify-start"}`}>
+                  <p className={`text-xs font-medium ${darkMode ? "text-gray-300": "text-gray-600"} mb-1`}>{message.username}</p>
+                </div>
+                <div className={`rounded-md pr-3 pl-3 pt-1 pb-1 mb-4 max-w-xs w-fit ${message.status === "sent" ? darkMode ? "bg-white text-black border border-white": "bg-black text-white border border-neutral-800": darkMode ? "bg-black text-white border border-neutral-800": "bg-white text-black border border-white"} shadow-lg transition-all duration-300`}>
+                  <p className="text-lg">{message.message}</p>
+                </div>
               </div>
-              <div className={`rounded-md pr-3 pl-3 pt-1 pb-1 mb-4 max-w-xs w-fit ${message.status === "sent" ? darkMode ? "bg-white text-black border border-white" : "bg-black text-white border border-neutral-800" : darkMode ? "bg-black text-white border border-neutral-800" : "bg-white text-black border border-white"} shadow-lg transition-all duration-300`}>
-                <p className="text-lg">{message.message}</p>
-              </div>
-            </div>
           </div>
         ))}
       </div>
 
       <div className={`w-full ${darkMode ? "bg-black" : "bg-gray-100"} flex justify-center items-center p-4`}>
-        <div className={`w-full sm:w-2/4 md:w-3/4 lg:w-2/3 ${darkMode ? "bg-black" : "bg-gray-100"} border ${darkMode ? "border-neutral-600" : "border-neutral-300"} p-4 rounded-lg shadow-lg flex items-center space-x-4`}>
-          <input
-            ref={inputRef}
-            className={`flex-1 ${darkMode ? "bg-black text-white placeholder-neutral-400" : "bg-gray-100 text-black placeholder-neutral-600"} rounded-lg p-3 outline-none border ${darkMode ? "border-neutral-600" : "border-neutral-300"} focus:ring-1 focus:ring-white`}
-            type="text"
-            placeholder="Type a message..."
-            onChange={handleTyping}
-          />
+        <div className={`w-full sm:w-3/4 lg:w-2/4 mr-4 ${darkMode ? "bg-black" : "bg-gray-100"} border ${darkMode ? "border-neutral-600" : "border-neutral-300"} p-4 rounded-lg shadow-lg flex items-center space-x-4`}>
+          <input ref={inputRef} className={`flex-1 ${darkMode ? "bg-black text-white placeholder-neutral-400" : "bg-gray-100 text-black placeholder-neutral-600"} rounded-lg p-3 outline-none border ${darkMode ? "border-neutral-600" : "border-neutral-300"} focus:ring-1 focus:ring-white`} type="text" placeholder="Type a message..." onChange={handleTyping}/>
           {userTyping && <p className={darkMode ? "text-white": "text-black"}>{userTyping} Typing...</p>}
-          <button
-            className={`font-semibold px-4 py-2 rounded-lg ${darkMode ? "bg-white text-black hover:bg-gray-200" : "bg-black text-white hover:bg-gray-800"}`}
-            onClick={send}>
+          <button className={`font-semibold px-4 py-2 rounded-lg ${darkMode ? "bg-white text-black hover:bg-gray-200" : "bg-black text-white hover:bg-gray-800"}`} onClick={send}>
             Send
           </button>
-        </div>
       </div>
-
-      <div className="fixed bottom-2 right-2">
-        <button className={`p-2 rounded-full ${darkMode ? 'text-white' : 'text-black'} transition-all duration-300`} onClick={() => {
-          if (wsRef.current) {
-            wsRef.current.close();
-          }
-          navigate("/room")
-        }}>
-          <Exit />
-        </button>
       </div>
-
-      {copySuccess && (
+      <div className="fixed bottom-0 right-0 sm:bottom-4 sm:right-4">
+      <button className={`rounded-full ${darkMode ? 'text-white' : 'text-black'} transition-all duration-30`} onClick={() => {
+        if (wsRef.current) {
+          wsRef.current.close();
+        }
+        navigate("/room")
+      }}>
+        <Exit />
+      </button>
+    </div>
+    {copySuccess && (
         <div className="fixed bottom-4 right-4 bg-black border border-gray-300 text-white pr-12 pl-4 pt-4 pb-4 rounded-lg">
           <p className="text-xs">Room Code copied to clipboard!</p>
         </div>
-      )}
+    )}
     </div>
   )
 }
