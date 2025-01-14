@@ -123,11 +123,13 @@ function App() {
           </div>
         ))}
       </div>
-
+      <div className='flex justify-center'>
+      {userTyping && <p className={darkMode ? "text-white": "text-black"}>{userTyping} Typing...</p>}
+      </div>
       <div className={`w-full ${darkMode ? "bg-black" : "bg-gray-100"} flex justify-center items-center p-2 xs:p-4`}>
         <div className={`w-full sm:w-2/4 mr-6 xs:mr-4 ${darkMode ? "bg-black" : "bg-gray-100"} border ${darkMode ? "border-neutral-600" : "border-neutral-300"} p-3 xs:p-4 rounded-lg shadow-lg flex items-center space-x-4`}>
           <input ref={inputRef} className={`flex-1 ${darkMode ? "bg-black text-white placeholder-neutral-400" : "bg-gray-100 text-black placeholder-neutral-600"} rounded-md xs:rounded-lg p-1 xs:p-3 outline-none border ${darkMode ? "border-neutral-600" : "border-neutral-300"} focus:ring-1 focus:ring-white`} type="text" placeholder="Type a message..." onChange={handleTyping}/>
-          {userTyping && <p className={darkMode ? "text-white": "text-black"}>{userTyping} Typing...</p>}
+          {/* {userTyping && <p className={darkMode ? "text-white": "text-black"}>{userTyping} Typing...</p>} */}
           <button className={`font-semibold px-2 py-1 xs:px-4 xs:py-2 rounded-lg ${darkMode ? "bg-white text-black hover:bg-gray-200" : "bg-black text-white hover:bg-gray-800"}`} onClick={send}>
             Send
           </button>
